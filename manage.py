@@ -21,10 +21,9 @@ import sys
 DIR_PATH = os.path.dirname(os.path.abspath(__file__))
 EXTRA_PATHS = [
     DIR_PATH,
-    os.path.join(DIR_PATH, 'lib', 'tornado-3.1'),
-    os.path.join(DIR_PATH, 'lib', 'blinker-1.3'),
-    os.path.join(DIR_PATH, 'lib', 'tornado-redis-2.4.7'),
-    os.path.join(DIR_PATH, 'lib', 'rarfile-2.6'),
+    os.path.join(DIR_PATH, 'lib', 'django-haystack-2.1.0'),
+    os.path.join(DIR_PATH, 'lib', 'whoosh-2.5.1'),
+    os.path.join(DIR_PATH, 'lib', 'pytz-master'),
 ]
 sys.path = EXTRA_PATHS + sys.path
 
