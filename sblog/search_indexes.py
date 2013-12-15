@@ -1,8 +1,4 @@
-#!/usr/bin/env python
 # coding=utf-8
-import os
-import sys
-
 #
 # Copyright 2013 nava
 #
@@ -18,19 +14,16 @@ import sys
 # License for the specific language governing permissions and limitations
 # under the License.
 
-DIR_PATH = os.path.dirname(os.path.abspath(__file__))
-EXTRA_PATHS = [
-    DIR_PATH,
-    os.path.join(DIR_PATH, 'lib', 'django-haystack-2.1.0'),
-    os.path.join(DIR_PATH, 'lib', 'whoosh-2.5.1', 'src'),
-    os.path.join(DIR_PATH, 'lib', 'pytz-master'),
-]
-sys.path = EXTRA_PATHS + sys.path
+from models import Blog
+from haystack import indexes
 
 
-if __name__ == "__main__":
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "django_search.settings")
+class BlogIndex(indexes.SearchIndex, indexes.Indexable):
+    text = indexes.CharField(document=True, use_template=True)
 
-    from django.core.management import execute_from_command_line
+    def get_model(self):
+        return Blog
 
-    execute_from_command_line(sys.argv)
+    def index_queryset(self):
+        """Used when the entire index for model is updated."""
+        return self.get_model().objects.all()   #确定在建立索引时有些记录被索引，这里我们简单地返回所有记录
