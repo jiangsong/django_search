@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.auth.models import User
 
 class Tag(models.Model):
     """docstring for Tags"""
@@ -32,3 +32,12 @@ class Blog(models.Model):
 
     def __unicode__(self):
         return u'%s %s %s' % (self.caption, self.author, self.publish_time)
+
+class Note(models.Model):
+    user = models.ForeignKey(Author)
+    pub_date = models.DateTimeField()
+    title = models.CharField(max_length=200)
+    body = models.TextField()
+
+    def __unicode__(self):
+        return self.title
