@@ -57,6 +57,11 @@ HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
         'PATH': os.path.join(BASE_DIR, 'whoosh_index'),
+        'STORAGE': 'file',
+        'POST_LIMIT': 128 * 1024 * 1024,
+        'INCLUDE_SPELLING': True,
+        'BATCH_SIZE': 100, # How many records should be updated at once via the management commands
+        'EXCLUDED_INDEXES': ['thirdpartyapp.search_indexes.BarIndex'],
     },
 }
 

@@ -30,6 +30,8 @@ sys.path = EXTRA_PATHS + sys.path
 
 if __name__ == "__main__":
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "django_search.settings")
+    if len(sys.argv) < 2:
+        sys.argv.append("runserver")
 
     from django.core.management import execute_from_command_line
 
