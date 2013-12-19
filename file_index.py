@@ -24,6 +24,7 @@ EXTRA_PATHS = [
     os.path.join(DIR_PATH, 'lib', 'django-haystack-2.1.0'),
     os.path.join(DIR_PATH, 'lib', 'whoosh-2.5.1', 'src'),
     os.path.join(DIR_PATH, 'lib', 'pytz-master'),
+    os.path.join(DIR_PATH, 'lib', 'jieba'),
 ]
 sys.path = EXTRA_PATHS + sys.path
 from whoosh.fields import Schema, TEXT,ID,STORED
@@ -32,6 +33,7 @@ from whoosh import index
 from whoosh.query import *
 from whoosh.qparser import QueryParser
 import locale
+from jieba.analyse import ChineseAnalyzer
 
 
 def string_to_utf8(value):
@@ -62,7 +64,11 @@ if __name__ == "__main__":
     #
     # 创建schema
     #
-    schema = Schema(path=ID(unique=True, stored=True), content=TEXT)
+    analyzer = ChineseAnalyzer()
+    schema = Schema(path=ID(unique=True, stored=True), content=TEXT(stored=True, analyzer=analyzer))
+
+    #schema = Schema(path=ID(stored=True, stored=True), content=TEXT(stored=True, analyzer=analyzer))
+
     if not os.path.exists("file_index"):
         os.mkdir("file_index")
 
@@ -89,13 +95,18 @@ if __name__ == "__main__":
 
     parser = QueryParser("content", ix.schema)
     #query = parser.parse(myquery)
-    query = parser.parse(u"dd")
+    query = parser.parse(u"中华")
 
     #with ix.searcher() as searcher:
 
-    results = searcher.search(query, limit=None)
+    #results = searcher.search(query, limit=None)
+    results = searcher.search(query)
 
     print "Length of Results :", len(results)
     print "\nResults : "
-    for i in range (0,len(results)):
-        print results[i]
+    for hit in results:
+        print hit.highlights("content")
+
+
+    #for i in range (0,len(results)):
+    #    print results[i]
